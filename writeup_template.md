@@ -8,8 +8,9 @@
 
 **Finding Lane Lines on the Road**
 
-
-The aim of this project is to detect lane lines in a video, based on the knowledge gained through Udacity's teachings in the first week. The project is written in Python, and was tested in the Jupyter Notebook on the given input videos and images. The input videos were annotated by the red lane markings computed over the original content of the video.
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on your work in a written report
 
 
 [//]: # (Image References)
@@ -21,11 +22,6 @@ The aim of this project is to detect lane lines in a video, based on the knowled
 ### Reflection
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
-
-
-[//]: # (Image References)
-
-[image1]: ./examples/grayscale.jpg "Grayscale"
 
 My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
 

@@ -1,56 +1,80 @@
 # **Finding Lane Lines on the Road** 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+<img src="writeup_images/7.png" width="480" alt="Combined Image" />
 
 Overview
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+The aim of this project is to detect lane lines in a video, based on the knowledge gained through Udacity's teachings in the first week. The project is written in Python, and was tested in the Jupyter Notebook on the given input videos and images. The input videos were annotated by the red lane markings computed over the original content of the video.
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+[//]: # (Image References)
 
-1. Describe the pipeline
-
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
-
-
-The Project
+[image1]: ./writeup_images/1.png "Original"
+[image2]: ./writeup_images/2.png "Grayscale"
+[image3]: ./writeup_images/3.png "Blurred"
+[image4]: ./writeup_images/4.png "Canny"
+[image5]: ./writeup_images/5.png "Masked"
+[image6]: ./writeup_images/6.png "Hough Lines"
+[image7]: ./writeup_images/7.png "Final"
 ---
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+## Reflection
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://classroom.udacity.com/nanodegrees/nd013/parts/fbf77062-5703-404e-b60c-95b78b2f3f9e/modules/83ec35ee-1e02-48a5-bdb7-d244bd47c2dc/lessons/8c82408b-a217-4d09-b81d-1bda4c6380ef/concepts/4f1870e0-3849-43e4-b670-12e6f2d4b7a7) if you haven't already.
+### Pipline Implementation
 
-**Step 2:** Open the code in a Jupyter Notebook
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out <A HREF="https://www.packtpub.com/books/content/basics-jupyter-notebook-and-python" target="_blank">Cyrille Rossant's Basics of Jupyter Notebook and Python</A> to get started.
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+![alt text][image1]
 
-`> jupyter notebook`
+The pipeline consists of 8 steps and is implemented in lane_line_detector().
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+1. The input image is converted to grayscale
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
+  ![alt text][image2]
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+2. The Guassian Blur is applied to smooth the image and slightly remove noises. The kernel size was set to 5.
 
+  ![alt text][image3]
+
+3. Canny edge detection is used.
+
+  ![alt text][image4]
+
+4. A four sided polygon is created to mask the the image with detected edges 
+
+  ![alt text][image5]
+
+5. Lines in the image are extracted using the Hough transform with the following parameters:
+    | Parameter | Value | Description
+    | :-- | :--- | :---
+    | rho | 2 | Distance resolution in pixels of the Hough grid
+    | theta | Pi/180 | Angular resolution in radians of the Hough grid
+    | threshold | 40 | Minimum number of votes (intersections in Hough grid cell)
+    | min_line_length | 40 | Minimum number of pixels making up a line
+    | max_line_gap | 150 | Maximum gap in pixels between connectable line segments
+
+6. Lines are classified into left and right lines. In order to that, the minimum and maximum slopes of the lines in the image are obtained. Then those lines that fall within 70% of the minimum and maximum slopes are classified as the left and right lines.
+
+7. The left and right side lines are extrapolated by averaging their slope and intercept respectively. This is done by changing the draw_lines() method. The result of steps 5, 6 and 7 is depicted in the following figure:
+
+ ![alt text][image6]
+
+8. The lines are overlayed on the input image to mark the lane.
+
+ ![alt text][image7]
+
+
+
+### Potential Shortcomings 
+
+Lane lines are not always clearly marked or visible. Different lighting conditions and artifacts on the road might partially cover the lane markings. Additionally, in many situations where the road is under construction, the lanes are not properly and clearly marked. It might be necessary to distinguish between the yellow and white lane markings the detect the correct lane.
+
+Another problem might appear when there are shadows or white lines in the image. This will cause the classification algorithm to not function properly. Therefore a better classification method is needed.
+
+
+### Possible Improvements
+
+A possible improvement would be to apply a better noise reduction method on the image to remove unwanted artifacts in the image. Also, it would more effecient to dynamically detect the thresholds and parameters according to the image characteristics, so that the detection of lines becomes more accurate. 
