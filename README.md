@@ -8,7 +8,7 @@ Overview
 
 
 The aim of this project is to detect lane lines in a video, based on the knowledge gained through Udacity's teachings in the first week. The project is written in Python, and was tested in the Jupyter Notebook on the given input videos and images. The input videos were annotated by the red lane markings computed over the original content of the video.
----
+
 
 ## Reflection
 
@@ -37,13 +37,14 @@ The pipeline consists of 8 steps and is implemented in lane_line_detector().
 ![Masked with a four sided polygon](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/5.png)
 
 5. Lines in the image are extracted using the Hough transform with the following parameters:
-| Parameter | Value | Description
-| :-- | :--- | :---
-| rho | 2 | Distance resolution in pixels of the Hough grid
-| theta | Pi/180 | Angular resolution in radians of the Hough grid
-| threshold | 40 | Minimum number of votes (intersections in Hough grid cell)
-| min_line_length | 40 | Minimum number of pixels making up a line
-| max_line_gap | 150 | Maximum gap in pixels between connectable line segments
+
+| Parameter | Value | Description |
+| --- | --- | --- |
+| `rho` | 2 | Distance resolution in pixels of the Hough grid |
+| `theta` | Pi/180 | Angular resolution in radians of the Hough grid |
+| `threshold` | 40 | Minimum number of votes (intersections in Hough grid cell) |
+| `min_line_length` | 40 | Minimum number of pixels making up a line |
+| `max_line_gap` | 150 | Maximum gap in pixels between connectable line segments |
 
 6. Lines are classified into left and right lines. In order to that, the minimum and maximum slopes of the lines in the image are obtained. Then those lines that fall within 70% of the minimum and maximum slopes are classified as the left and right lines.
 
