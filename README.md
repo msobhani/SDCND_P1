@@ -8,17 +8,6 @@ Overview
 
 
 The aim of this project is to detect lane lines in a video, based on the knowledge gained through Udacity's teachings in the first week. The project is written in Python, and was tested in the Jupyter Notebook on the given input videos and images. The input videos were annotated by the red lane markings computed over the original content of the video.
-
-
-[//]: # (Image References)
-
-[image1]: ./writeup_images/1.png "Original"
-[image2]: ./writeup_images/2.png "Grayscale"
-[image3]: ./writeup_images/3.png "Blurred"
-[image4]: ./writeup_images/4.png "Canny"
-[image5]: ./writeup_images/5.png "Masked"
-[image6]: ./writeup_images/6.png "Hough Lines"
-[image7]: ./writeup_images/7.png "Final"
 ---
 
 ## Reflection
@@ -27,45 +16,44 @@ The aim of this project is to detect lane lines in a video, based on the knowled
 
 
 
-![alt text][image1]
+![Original](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/1.png)
 
 The pipeline consists of 8 steps and is implemented in lane_line_detector().
 
 1. The input image is converted to grayscale
 
-  ![alt text][image2]
+![Grayscale](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/2.png)
 
 2. The Guassian Blur is applied to smooth the image and slightly remove noises. The kernel size was set to 5.
 
-  ![alt text][image3]
+![Gaussian Blur](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/3.png)
 
 3. Canny edge detection is used.
 
-  ![alt text][image4]
+![Canny Edge Detection](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/4.png)
 
 4. A four sided polygon is created to mask the the image with detected edges 
 
-  ![alt text][image5]
+![Masked with a four sided polygon](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/5.png)
 
 5. Lines in the image are extracted using the Hough transform with the following parameters:
-    | Parameter | Value | Description
-    | :-- | :--- | :---
-    | rho | 2 | Distance resolution in pixels of the Hough grid
-    | theta | Pi/180 | Angular resolution in radians of the Hough grid
-    | threshold | 40 | Minimum number of votes (intersections in Hough grid cell)
-    | min_line_length | 40 | Minimum number of pixels making up a line
-    | max_line_gap | 150 | Maximum gap in pixels between connectable line segments
+| Parameter | Value | Description
+| :-- | :--- | :---
+| rho | 2 | Distance resolution in pixels of the Hough grid
+| theta | Pi/180 | Angular resolution in radians of the Hough grid
+| threshold | 40 | Minimum number of votes (intersections in Hough grid cell)
+| min_line_length | 40 | Minimum number of pixels making up a line
+| max_line_gap | 150 | Maximum gap in pixels between connectable line segments
 
 6. Lines are classified into left and right lines. In order to that, the minimum and maximum slopes of the lines in the image are obtained. Then those lines that fall within 70% of the minimum and maximum slopes are classified as the left and right lines.
 
 7. The left and right side lines are extrapolated by averaging their slope and intercept respectively. This is done by changing the draw_lines() method. The result of steps 5, 6 and 7 is depicted in the following figure:
 
- ![alt text][image6]
+![Hough Lines](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/6.png)
 
 8. The lines are overlayed on the input image to mark the lane.
 
- ![alt text][image7]
-
+![Final Image](https://github.com/msobhani/SDCND_P1/blob/master/writeup_images/7.png)
 
 
 ### Potential Shortcomings 
